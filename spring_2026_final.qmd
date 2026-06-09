@@ -31,13 +31,11 @@ In Part 1, my co-worker used logistic regression. We can tell because the goal i
 
 In Part 2, my co-worker used a chi-square test of independence. This is because both variables being compared are categorical — bird species (Avocet, Forster's Tern, Black-necked Stilt) and habitat type (managed pond, non-tidal marsh, salt pond, tidal marsh, tidal mudflat). A chi-square test tells us whether the two categorical variables are associated with each other or not.
 
+## b.
 
+Part 1: American Avocets were more likely to be found in microhabitat sites that were closer to the water's edge. This suggests that how far a spot is from the water plays a role in whether or not an Avocet chooses to use it.
 
-
-
-
-
-
+Part 2: The three bird species did not use the five habitat types equally. Each species tended to show up more in certain habitats than others, meaning the habitat a bird is found in is related to which species it is.
 
 
 
