@@ -69,5 +69,28 @@ str(nests_clean)
 slice_sample(nests_clean, n = 10)
 ```
 
+## b.
+
+The 1s and 0s in the case_control column represent whether a given tree contained a bird nest (1) or was a nearby available tree with no nest present (0). This is a binary outcome used to compare the characteristics of trees that birds actually chose to nest in versus trees that were available but unused.
+
+## c. 
+
+**Tree height (height_cm, continuous variable measured in centimeters):**
+As tree height increases, the probability of nest occurrence would likely increase because taller trees may offer more structural complexity and concealment, making them more attractive and safer nesting locations. The authors note that all nests found in the study were located in live trees more than 1.5 m in height, suggesting a minimum height threshold for nest use. (Methods, paragraph 2; Results, paragraph 1)
+
+**Acacia ant species (ant_species, categorical variable with 3 levels: C. sjostedti, C. mimosae, and C. nigriceps):**
+The ant species occupying a tree could influence the probability of nest occurrence because different species vary in how aggressively they defend their host trees against predators. C. mimosae and C. nigriceps are aggressive defenders against both mammalian and insect herbivores, and birds nesting in those trees may benefit from protection against nest predators. In contrast, C. sjostedti provides only minimal protection, making those trees potentially less safe or attractive for nesting birds. Additionally, C. nigriceps prunes the apical buds of its host tree, creating a denser canopy that likely provides extra concealment from predators such as snakes, mesocarnivores, and raptors. (Introduction, paragraphs 2 and 4; Discussion, paragraphs 2 and 3)
+
+## d. 
+
+|Model Number| Description                                        |
+|-----------------------------------------------------------------|
+| Model 1    | Probability of nest occurrence predicted by        |
+|            | tree height and acacia ant species (no interaction)|
+|-----------------------------------------------------------------|
+| Model 2    | Probability of nest occurrence predicted by tree   |
+|            | height and acacia ant species, with an interaction |
+|            |  between the two predictors                        |     
+
 
 
