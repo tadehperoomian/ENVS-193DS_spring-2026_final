@@ -18,6 +18,7 @@ library(janitor)
 library(readxl)
 library(here)
 library(DHARMa)
+library(knitr)
 
 nests <- read.csv("data/nest_data_final.csv")
 ```
@@ -83,14 +84,10 @@ The ant species occupying a tree could influence the probability of nest occurre
 
 ## d. 
 
-|Model Number| Description                                        |
-|-----------------------------------------------------------------|
-| Model 1    | Probability of nest occurrence predicted by        |
-|            | tree height and acacia ant species (no interaction)|
-|-----------------------------------------------------------------|
-| Model 2    | Probability of nest occurrence predicted by tree   |
-|            | height and acacia ant species, with an interaction |
-|            |  between the two predictors                        |     
+| Model Number | Description                                                                                                                                |
+|--------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| Model 1      | Probability of nest occurrence predicted by tree height and acacia ant species, no interaction                                             |
+| Model 2      | Probability of nest occurrence predicted by tree height and acacia ant species, with interaction between tree height and acacia ant species |   
 
 ## e.
 
@@ -126,9 +123,96 @@ The best model as determined by Akaike's Information Criterion (AIC) was the mod
 #| label: diagnostics
 
 # swap model1 or model2 for whichever was selected in part f
-simulated_residuals <- simulateResiduals(fittedModel = model1, 
-                                         plot = TRUE)
+simulated_residuals <- simulateResiduals(fittedModel = model2, plot = TRUE)
 ```
+
+
+## h.
+
+```{r}
+#| label: figure-model-predictions
+
+# create a grid of values to predict over
+pred_data <- expand.grid(
+  height_cm = seq(min(nests_clean$height_cm),
+                  max(nests_clean$height_cm),
+                  length.out = 100),
+  ant_species = factor(c("AB", "RRB", "BBR"),
+                       levels = c("AB", "RRB", "BBR"))
+)
+
+# get predictions and confidence intervals
+preds <- predict(model2, newdata = pred_data, type = "link", se.fit = TRUE)
+
+pred_data$fit   <- plogis(preds$fit)
+pred_data$lower <- plogis(preds$fit - 1.96 * preds$se.fit)
+pred_data$upper <- plogis(preds$fit + 1.96 * preds$se.fit)
+
+# plot
+ggplot() +
+  # raw data points
+  geom_jitter(data = nests_clean,
+              aes(x = height_cm, y = case_control, color = ant_species),
+              height = 0.02, alpha = 0.4) +
+  # model prediction lines
+  geom_line(data = pred_data,
+            aes(x = height_cm, y = fit, color = ant_species),
+            linewidth = 1) +
+  # confidence interval ribbons
+  geom_ribbon(data = pred_data,
+              aes(x = height_cm, ymin = lower, ymax = upper, fill = ant_species),
+              alpha = 0.2) +
+  # one panel per ant species
+  facet_wrap(~ ant_species,
+             labeller = labeller(ant_species = c("AB"  = "C. sjostedti",
+                                                 "RRB" = "C. mimosae",
+                                                 "BBR" = "C. nigriceps"))) +
+  theme_classic() +
+  scale_color_manual(values = c("AB"  = "darkorange",
+                                "RRB" = "steelblue",
+                                "BBR" = "seagreen"),
+                     labels = c("C. sjostedti", "C. mimosae", "C. nigriceps")) +
+  scale_fill_manual(values  = c("AB"  = "darkorange",
+                                "RRB" = "steelblue",
+                                "BBR" = "seagreen"),
+                    labels  = c("C. sjostedti", 
+                                "C. mimosae", 
+                                "C. nigriceps")) +
+  labs(x = "Tree Height (cm)",
+       y = "Predicted Probability of Nest Occurrence",
+       color = "Ant Species",
+       fill  = "Ant Species")
+```
+
+## i.
+
+Figure 1. Predicted probability of bird nest occurrence by tree height for three acacia ant species. Each panel shows how the predicted probability of a bird nesting in a tree changes as tree height increases, with one panel for each ant species (Crematogaster sjostedti, C. mimosae, and C. nigriceps). The line shows the model's predicted probability and the shaded area around it represents the 95% confidence interval. Individual points show whether a nest was actually present (1) or absent (0) in each tree, and are jittered slightly so they don't overlap. Data from: Lujan, E., Nielsen, R., Short, Z., Wicks, S., Nderitu Watetu, W., Malingati Khasoha, L., Palmer, T. M., Goheen, J. R., & Alston, J. M. (2023). Zenodo. https://doi.org/10.5281/zenodo.8373322.
+
+## j.
+
+```{r}
+#| label: predictions-600cm
+
+# new data frame at 600 cm for all three species
+new_data <- data.frame(
+  height_cm   = 600,
+  ant_species = factor(c("AB", "RRB", "BBR"),
+                       levels = c("AB", "RRB", "BBR"))
+)
+
+# get predicted probabilities
+new_data$predicted_prob <- predict(model2, newdata = new_data, type = "response")
+
+new_data
+```
+
+## k.
+
+At the tallest tree height examined (600 cm), the predicted probability of nest occurrence was highest in trees occupied by C. nigriceps (0.93) and lowest in trees occupied by C. sjostedti (0.47), with C. mimosae in between (0.83). As shown in Figure 1, the probability of nest occurrence increased with tree height for all three ant species, but ant species also clearly mattered — birds strongly preferred trees with more aggressive defenders. This likely reflects the fact that C. nigriceps and C. mimosae protect nests from predators and C. nigriceps additionally creates denser canopies through apical bud pruning, providing extra concealment for nesting birds.
+
+
+
+
 
 
 
