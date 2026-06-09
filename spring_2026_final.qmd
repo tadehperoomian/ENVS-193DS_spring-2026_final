@@ -37,5 +37,13 @@ Part 1: American Avocets were more likely to be found in microhabitat sites that
 
 Part 2: The three bird species did not use the five habitat types equally. Each species tended to show up more in certain habitats than others, meaning the habitat a bird is found in is related to which species it is.
 
+## c.
+
+One additional variable that could be worth looking at is water depth, measured in centimeters at each survey point using a ruler or depth probe. American Avocets are wading birds that forage by sweeping their bill through shallow water, so sites that are too deep or too dry may simply not be usable for feeding, which would directly affect whether or not Avocets choose to use a given microhabitat.
+
+
+
+
+
 
 
