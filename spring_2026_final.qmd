@@ -17,7 +17,7 @@ library(tidyverse)
 library(janitor)
 library(readxl)
 library(here)
-
+library(DHARMa)
 
 nests <- read.csv("data/nest_data_final.csv")
 ```
@@ -91,6 +91,47 @@ The ant species occupying a tree could influence the probability of nest occurre
 | Model 2    | Probability of nest occurrence predicted by tree   |
 |            | height and acacia ant species, with an interaction |
 |            |  between the two predictors                        |     
+
+## e.
+
+```{r}
+#| label: run-models
+
+# Model 1: no interaction
+model1 <- glm(case_control ~ height_cm + ant_species,
+              data = nests_clean,
+              family = binomial)
+
+# Model 2: with interaction
+model2 <- glm(case_control ~ height_cm * ant_species,
+              data = nests_clean,
+              family = binomial)
+```
+
+
+## f.
+
+```{r}
+#| label: model-selection
+
+AIC(model1, model2)
+```
+
+The best model as determined by Akaike's Information Criterion (AIC) was the model predicting probability of bird nest occurrence from tree height and acacia ant species with an interaction term (AIC = 237.80), as it had a lower AIC value than the model without an interaction term (AIC = 258.74).
+
+
+## g.
+
+```{r}
+#| label: diagnostics
+
+# swap model1 or model2 for whichever was selected in part f
+simulated_residuals <- simulateResiduals(fittedModel = model1, 
+                                         plot = TRUE)
+```
+
+
+
 
 
 
