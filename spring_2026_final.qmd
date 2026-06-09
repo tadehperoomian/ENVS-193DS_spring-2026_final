@@ -23,6 +23,20 @@ nest <- read.csv("data/nest_data_final.csv")
 ```
 
 
+# Problem 1
+
+## a.
+
+In Part 1, my co-worker used logistic regression. We can tell because the goal is to predict a probability (will an Avocet use this microhabitat or not, which is a yes/no outcome) from a continuous measurement (distance to the water edge in meters). Logistic regression is the right tool when your response variable is binary like this.
+
+In Part 2, my co-worker used a chi-square test of independence. This is because both variables being compared are categorical — bird species (Avocet, Forster's Tern, Black-necked Stilt) and habitat type (managed pond, non-tidal marsh, salt pond, tidal marsh, tidal mudflat). A chi-square test tells us whether the two categorical variables are associated with each other or not.
+
+
+
+
+
+
+
 
 
 
