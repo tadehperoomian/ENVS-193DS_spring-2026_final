@@ -8,7 +8,8 @@ format:
 editor: source    
 ---
 
-![Link to my Repository](https://github.com/tadehperoomian/ENVS-193DS_spring-2026_final)
+**GitHub Repository:** 
+[ENVS-193DS Spring 2026 Final](http://github.com/tadehperoomian/ENVS-193DS_spring-2026_final)
 
 
 ```{r setup, include=FALSE}
