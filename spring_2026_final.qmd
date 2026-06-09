@@ -19,6 +19,7 @@ library(readxl)
 library(here)
 library(DHARMa)
 library(knitr)
+library(rstatix)
 
 nests <- read.csv("data/nest_data_final.csv")
 ```
@@ -210,12 +211,87 @@ new_data
 
 At the tallest tree height examined (600 cm), the predicted probability of nest occurrence was highest in trees occupied by C. nigriceps (0.93) and lowest in trees occupied by C. sjostedti (0.47), with C. mimosae in between (0.83). As shown in Figure 1, the probability of nest occurrence increased with tree height for all three ant species, but ant species also clearly mattered — birds strongly preferred trees with more aggressive defenders. This likely reflects the fact that C. nigriceps and C. mimosae protect nests from predators and C. nigriceps additionally creates denser canopies through apical bud pruning, providing extra concealment for nesting birds.
 
+# Problem 3
+
+## a.
+
+**How are they different?**
+The Bar Chart I made for homework 2 uses simple colored rectangles to show the total count of drinks consumed in the afternoon vs. morning, while the affective visualization from homework 3 uses illustrated drink containers (coffee cup, matcha cup, and a boba cup) styled to look like the actual drinks consumed at each time of day, with the height of each container still showing the count on the y-axis. In the affective visualization I also added a third category of evening, that was not present in the homework 2 chart, because I had not yet had an evening drink.
+
+**What similarities do you see?**
+Both visualizations use the same x-axis (time of day) and y-axis (number of drinks as a count), and both show that caffeinated drink consumption varies across different times of day. The bar/container format is shared between both, with height showing the number of drinks.
+
+**What patterns do you see?**
+In the homework 2 chart, afternoon has a slightly higher count (7) than morning (6), suggesting drinks were consumed more in the afternoon. In the affective visualization however, morning shows the highest count (18), followed by afternoon (11) and evening (1), which is a different pattern, which is because the homework 3 visualization includes more data collected over a longer period of time.
+
+**What feedback did you get in week 9?**
+In week 9, I received feedback on the way my visualization was ordered, as it was originally not in the Morning, Afternoon, Evening order. I took their advice and fixed this. I also recieved a suggestion to measure the milligrams of caffeine consumed, and while it sounds like a great project idea, I could not go back and fix it for this project. I made many of my own caffeinated drinks and did not measure the amount of caffeine in them.
 
 
+## b.
 
+I propose using a chi-square goodness of fit test to determine whether time of day influences the number of caffeinated drinks I consumed. My response variable is the count of caffeinated drinks consumed (discrete numeric variable), and my predictor is time of day (categorical variable with 3 levels: Morning, Afternoon, and Evening). A chi-square goodness of fit test is appropriate because I am testing whether drinks are distributed equally across the three time of day categories.
 
+## c.
 
+```{r}
+#| label: assumption-check
 
+# chi-square assumes expected counts of at least 5 per cell
+# check observed counts per time of day
+drinks_raw <- read.csv("data/caffeinated_drinks.csv") |> 
+  clean_names() |> 
+  filter(time_of_day %in% c("Morning", "Afternoon", "Evening")) |> 
+  mutate(time_of_day = factor(time_of_day,
+                              levels = c("Morning", "Afternoon", "Evening")))
+
+table(drinks_raw$time_of_day)
+```
+
+The expected count for the Evening category (n = 1) falls below the minimum threshold of 5 required for a chi-square test, meaning the results should be interpreted with caution.
+
+```{r}
+#| label: chi-square-test
+
+drinks_count <- table(drinks_raw$time_of_day)
+
+chisq_result <- chisq.test(drinks_count)
+chisq_result
+```
+
+```{r}
+#| label: effect-size
+
+# cramer's V needs the original table, not the test result
+cramer_v(drinks_count)
+```
+
+## d.
+
+```{r}
+#| label: figure-drinks-by-time
+
+drinks_raw |> 
+  group_by(time_of_day) |> 
+  summarise(count = n()) |> 
+ggplot(aes(x = time_of_day, y = count, fill = time_of_day)) +
+  geom_col() +
+  theme_classic() +
+  scale_fill_manual(values = c("Morning"   = "brown4",
+                               "Afternoon" = "lightgreen",
+                               "Evening"   = "lightpink3")) +
+  labs(x = "Time of Day",
+       y = "Number of Caffeinated Drinks (count)",
+       fill = "Time of Day")
+```
+
+## e.
+
+**Figure 2. Number of caffeinated drinks consumed across three times of day.** Bars show the total count of caffeinated drinks consumed during morning, afternoon, and evening. Morning is shown in brown, afternoon in green, and evening in pink. Data collected personally from April–May 2026.
+
+## f. 
+
+Time of day significantly influenced my consumption of caffeinated drinks (chi-square goodness of fit: χ² = 14.60, df = 2, p < 0.001, Cramér's V = 0.49). I consumed the most drinks in the morning (n = 18), followed by afternoon (n = 11) and evening (n = 1), suggesting that I tend to consume more caffeinated beverages earlier in the day. The moderate effect size (Cramér's V = 0.49) indicates that time of day explains a meaningful amount of the variation in my drink consumption.
 
 
 
