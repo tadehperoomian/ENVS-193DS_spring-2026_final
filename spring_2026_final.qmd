@@ -1,0 +1,28 @@
+---
+title: "ENVS-193DS_spring-2026_final"
+author: Tadeh Peroomian
+date: 08-06-2026
+format: 
+  pdf:
+    toc: true
+editor: source    
+---
+
+![Link to my Repository](https://github.com/tadehperoomian/ENVS-193DS_spring-2026_final)
+
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(janitor)
+library(readxl)
+library(here)
+
+
+nest <- read.csv("data/nest_data_final.csv")
+```
+
+
+
+
+
+
