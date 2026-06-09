@@ -125,7 +125,7 @@ The best model as determined by Akaike's Information Criterion (AIC) was the mod
 ```{r}
 #| label: diagnostics
 
-# swap model1 or model2 for whichever was selected in part f
+# check model diagnostics using simulated residuals
 simulated_residuals <- simulateResiduals(fittedModel = model2, plot = TRUE)
 ```
 
@@ -240,7 +240,7 @@ I propose using a chi-square goodness of fit test to determine whether time of d
 #| label: assumption-check
 
 # chi-square assumes expected counts of at least 5 per cell
-# check observed counts per time of day
+# check observed counts per time of day to verify this assumption is met
 drinks_raw <- read.csv("data/caffeinated_drinks.csv") |> 
   clean_names() |> 
   filter(time_of_day %in% c("Morning", "Afternoon", "Evening")) |> 
