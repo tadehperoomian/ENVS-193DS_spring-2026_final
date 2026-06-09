@@ -5,6 +5,8 @@ date: 08-06-2026
 format: 
   pdf:
     toc: true
+    output-file: "spring_2026_final"
+output-dir: "code"
 editor: source    
 ---
 
