@@ -19,7 +19,7 @@ library(readxl)
 library(here)
 
 
-nest <- read.csv("data/nest_data_final.csv")
+nests <- read.csv("data/nest_data_final.csv")
 ```
 
 
@@ -42,8 +42,32 @@ Part 2: The three bird species did not use the five habitat types equally. Each 
 One additional variable that could be worth looking at is water depth, measured in centimeters at each survey point using a ruler or depth probe. American Avocets are wading birds that forage by sweeping their bill through shallow water, so sites that are too deep or too dry may simply not be usable for feeding, which would directly affect whether or not Avocets choose to use a given microhabitat.
 
 
+# Problem 2
 
+## a. 
 
+```{r}
+#| label: cleaning-nests
+nests_clean <- nests |> 
+  select(case_control,
+         height_cm,
+         ant_species) |> 
+  filter(ant_species == "AB" |
+         ant_species == "RRB" |
+         ant_species == "BBR") |> 
+  mutate(ant_species = factor(ant_species,
+                              levels = c("AB",
+                                         "RRB",
+                                         "BBR"))) |> 
+  mutate(full_name = case_when(
+    ant_species == "AB" ~ "Crematogaster sjostedti",
+    ant_species == "RRB" ~ "Crematogaster mimosae",
+    ant_species == "BBR" ~ "Crematogaster nigriceps"
+  ))
+
+str(nests_clean)
+slice_sample(nests_clean, n = 10)
+```
 
 
 
