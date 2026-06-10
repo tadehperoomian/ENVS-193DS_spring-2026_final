@@ -185,19 +185,15 @@ Figure 1. Predicted probability of bird nest occurrence by tree height for three
 ## j.
 
 ```{r}
-#| label: predictions-600cm
+#| label: predictions
 
-# new data frame at 600 cm for all three species
-new_data <- data.frame(
-  height_cm   = 600,
-  ant_species = factor(c("AB", "RRB", "BBR"),
-                       levels = c("AB", "RRB", "BBR"))
-)
+#creating model prediction for 600cm
+ggpredict(model2,
+          terms = c("height_cm [600]", "ant_species"))
 
-# get predicted probabilities
-new_data$predicted_prob <- predict(model2, newdata = new_data, type = "response")
+#summary
+summary(model2)
 
-new_data
 ```
 
 ## k.
